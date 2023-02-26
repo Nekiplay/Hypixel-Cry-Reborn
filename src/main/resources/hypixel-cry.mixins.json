@@ -7,7 +7,9 @@
   ],
   "client": [
     "WindowMixin",
-    "TailRenderMixin"
+    "TailRenderMixin",
+    "world.ClientWorldMixin",
+    "accessors.AccessorWorldRenderer"
   ],
   "injectors": {
     "defaultRequire": 1

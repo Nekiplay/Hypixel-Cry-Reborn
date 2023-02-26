@@ -1,10 +1,9 @@
 package hypixelcryreborn.hypixelcry.mixins;
 
-import com.mojang.blaze3d.platform.DisplayData;
-import com.mojang.blaze3d.platform.ScreenManager;
-import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.platform.WindowEventHandler;
 import hypixelcryreborn.hypixelcry.imgui.impementation.ImguiLoader;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.RunArgs;
+import net.minecraft.client.util.Window;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -14,14 +13,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.io.InputStream;
 
-@Mixin(Window.class)
+@Mixin(MinecraftClient.class)
 public class WindowMixin {
     @Shadow
     @Final
-    private long window;
+    private Window window;
 
-    @Inject(at = @At("HEAD"),method = "setIcon")
-    private void setIcon(InputStream inputStream, InputStream inputStream2, CallbackInfo ci){
-        ImguiLoader.onGlfwInit(window);
+    @Inject(at = @At("TAIL"),method = "<init>")
+    private void setIcon(RunArgs args, CallbackInfo ci){
+        ImguiLoader.onGlfwInit(window.getHandle());
     }
 }

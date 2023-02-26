@@ -1,11 +1,13 @@
 package hypixelcryreborn.hypixelcry.imgui.impementation;
 
 import hypixelcryreborn.hypixelcry.HypixelCry;
+import hypixelcryreborn.hypixelcry.intefaces.CheatCategory;
+import hypixelcryreborn.hypixelcry.intefaces.CheatModule;
 import imgui.*;
 import imgui.flag.*;
 import imgui.gl3.*;
 import imgui.glfw.*;
-import net.minecraft.client.Minecraft;
+import imgui.type.ImBoolean;
 import org.lwjgl.glfw.GLFW;
 
 import static org.lwjgl.glfw.GLFW.glfwGetCurrentContext;
@@ -30,7 +32,20 @@ public class ImguiLoader {
             ImGui.newFrame();
             ImGui.begin("Hypixel Cry");
 
-            ImGui.text("Test");
+            for (CheatCategory category : HypixelCry.categories) {
+                ImGui.checkbox(category.GetName(), category.enabled);
+
+                if (category.enabled.get()) {
+                    ImGui.setNextWindowContentSize(50, 25);
+                    ImGui.begin(category.GetName());
+                    for (CheatModule cheatModule : category.modules) {
+
+                    }
+
+                    ImGui.end();
+                }
+            }
+
             ImGui.end();
             ImGui.render();
             imGuiGl3.renderDrawData(ImGui.getDrawData());
