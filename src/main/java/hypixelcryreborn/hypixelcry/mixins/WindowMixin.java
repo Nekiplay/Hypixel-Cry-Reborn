@@ -20,7 +20,15 @@ public class WindowMixin {
     private Window window;
 
     @Inject(at = @At("TAIL"),method = "<init>")
-    private void setIcon(RunArgs args, CallbackInfo ci){
+    private void onGlfwInit(RunArgs args, CallbackInfo ci){
         ImguiLoader.onGlfwInit(window.getHandle());
     }
+
+    @Inject(at = @At("RETURN"),method = "<init>")
+    private void onGlfwReturn(RunArgs args, CallbackInfo ci){
+        ImguiLoader.onGlfwReturn(window.getHandle());
+
+
+    }
+
 }

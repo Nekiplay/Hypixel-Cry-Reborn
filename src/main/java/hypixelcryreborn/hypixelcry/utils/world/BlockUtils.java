@@ -8,13 +8,14 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
+import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public class BlockUtils {
-    public void BreakBlock(BlockPos pos) {
+    public void BreakBlock(BlockPos pos, float delay) {
         MinecraftClient minecraft = MinecraftClient.getInstance();
         ClientPlayerEntity player = minecraft.player;
         World world = minecraft.world;
@@ -39,7 +40,7 @@ public class BlockUtils {
 
             // Wait for block to break
             try {
-                Thread.sleep((long) (speed * 750.0F) + 50L);
+                Thread.sleep((long) (speed * delay) + 50L);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

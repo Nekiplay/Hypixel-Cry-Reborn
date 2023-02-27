@@ -11,7 +11,10 @@ group = project.maven_group
 repositories {
     mavenLocal()
     mavenCentral()
-
+    maven {
+        name = "meteor-maven"
+        url = "https://maven.meteordev.org/releases"
+    }
     maven { url = "https://maven.fabricmc.net/" }
 }
 
@@ -37,7 +40,7 @@ dependencies {
     implementation "io.github.spair:imgui-java-natives-macos:${project.imguiVersion}"
     shadow "io.github.spair:imgui-java-natives-macos:${project.imguiVersion}"
 
-    implementation "org.reflections:reflections:${project.reflections_version}"
+    implementation "org.reflections:reflections:${project.reflections_version}" // Reflection
 }
 
 processResources {

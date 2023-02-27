@@ -3,15 +3,14 @@ package hypixelcryreborn.hypixelcry.imgui.impementation;
 import hypixelcryreborn.hypixelcry.HypixelCry;
 import hypixelcryreborn.hypixelcry.intefaces.CheatCategory;
 import hypixelcryreborn.hypixelcry.intefaces.CheatModule;
+import hypixelcryreborn.hypixelcry.utils.render.GL;
 import imgui.*;
 import imgui.flag.*;
 import imgui.gl3.*;
 import imgui.glfw.*;
-import imgui.type.ImBoolean;
-import org.lwjgl.glfw.GLFW;
+import org.spongepowered.asm.mixin.injection.struct.InjectionInfo;
 
-import static org.lwjgl.glfw.GLFW.glfwGetCurrentContext;
-import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class ImguiLoader {
     private static final ImGuiImplGlfw imGuiGlfw = new ImGuiImplGlfw();
@@ -19,32 +18,52 @@ public class ImguiLoader {
     private static final ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
 
     public static long windowHandle = -1;
-
-    public static void onGlfwInit(long handle) {
+    public static void onGlfwReturn(long handle) {
+        //loadImage();
+    }
+    private static int texture = -2;
+    public static void onGlfwInit(long handle)  {
         initializeImGui(handle);
         imGuiGlfw.init(handle, true);
         imGuiGl3.init();
         windowHandle = handle;
+
+        //HypixelCry.LOGGER.info("TextureID: " + HypixelCry.texture);
     }
+    private static void ParseCategory(CheatCategory category) {
+        if (category.IsAvalible()) {
+            if (ImGui.treeNode(category.GetName())) {
+                for (CheatCategory category1 : category.GetCategories()) {
+                    ParseCategory(category1);
+                }
+                for (CheatModule module : category.modules) {
+                    if (ImGui.treeNode(module.GetName())) {
+                        module.RenderGuiSettings();
+                        ImGui.treePop();
+                        ImGui.spacing();
+                    }
+                }
+
+                ImGui.treePop();
+                ImGui.spacing();
+            }
+        }
+    }
+
     public static void onFrameRender() {
         if (windowHandle != -1) {
             imGuiGlfw.newFrame();
             ImGui.newFrame();
-            ImGui.begin("Hypixel Cry");
+            ImGui.begin("Minecraft Cry");
 
             for (CheatCategory category : HypixelCry.categories) {
-                ImGui.checkbox(category.GetName(), category.enabled);
-
-                if (category.enabled.get()) {
-                    ImGui.setNextWindowContentSize(50, 25);
-                    ImGui.begin(category.GetName());
-                    for (CheatModule cheatModule : category.modules) {
-
-                    }
-
-                    ImGui.end();
-                }
+                ParseCategory(category);
             }
+
+                if (texture == -2) {
+                    texture = GL.bindTextureImgui("https://i.ibb.co/wssXWjY/4-VXo-5a55l-I.png");
+                }
+                ImGui.image(texture, 512, 512);
 
             ImGui.end();
             ImGui.render();
@@ -61,6 +80,7 @@ public class ImguiLoader {
 
     private static void initializeImGui(long glHandle) {
         ImGui.createContext();
+        ImGui.styleColorsDark();
         ImGuiIO io = ImGui.getIO();
         io.setIniFilename(null);
         io.setConfigFlags(ImGuiConfigFlags.NavEnableKeyboard);
