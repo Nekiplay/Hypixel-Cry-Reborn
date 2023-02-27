@@ -25,8 +25,6 @@ public class HypixelCry implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("Hypixel Cry");
 
     public static ArrayList<CheatCategory> categories = new ArrayList<>();
-    public static int texture = -2;
-   public static final Identifier CUSTOM_TEXTURE_ID = new Identifier("hypixelcry:textures/custom_texture.jpg");
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
     @Override
     public void onInitialize() {

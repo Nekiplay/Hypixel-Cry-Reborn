@@ -4,6 +4,7 @@ import hypixelcryreborn.hypixelcry.HypixelCry;
 import hypixelcryreborn.hypixelcry.intefaces.CheatCategory;
 import hypixelcryreborn.hypixelcry.intefaces.CheatModule;
 import hypixelcryreborn.hypixelcry.utils.render.GL;
+import hypixelcryreborn.hypixelcry.utils.render.imgui.ImGuiTexture;
 import imgui.*;
 import imgui.flag.*;
 import imgui.gl3.*;
@@ -21,13 +22,13 @@ public class ImguiLoader {
     public static void onGlfwReturn(long handle) {
         //loadImage();
     }
-    private static int texture = -2;
+    private static ImGuiTexture texture = new ImGuiTexture();
     public static void onGlfwInit(long handle)  {
         initializeImGui(handle);
         imGuiGlfw.init(handle, true);
         imGuiGl3.init();
         windowHandle = handle;
-
+        texture.Async("https://sun9-18.userapi.com/impg/lmRBB_nEOLYg7mKlfPgSgLYb7pyR_Ph5cNJwqA/HYGoGXM69o0.jpg?size=1080x1080&quality=96&sign=44810ca92f7f964017d72b70d5b5df41&type=album");
         //HypixelCry.LOGGER.info("TextureID: " + HypixelCry.texture);
     }
     private static void ParseCategory(CheatCategory category) {
@@ -60,10 +61,9 @@ public class ImguiLoader {
                 ParseCategory(category);
             }
 
-                if (texture == -2) {
-                    texture = GL.bindTextureImgui("https://i.ibb.co/wssXWjY/4-VXo-5a55l-I.png");
-                }
-                ImGui.image(texture, 512, 512);
+            if (texture.GetTexture() != -2) {
+                ImGui.image(texture.GetTexture(), 128, 128);
+            }
 
             ImGui.end();
             ImGui.render();
